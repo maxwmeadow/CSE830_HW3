@@ -21,6 +21,29 @@ class Comparable(Protocol):
     def __lt__(self, other: object, /) -> bool: ...
 
 
+def merge[T: Comparable](left: list[T], right: list[T]) -> list[T]:
+    """
+    Merge two sorted lists into a single sorted list.
+
+    :param left: Left collection
+    :param right: Right collection
+    :return: Merged result
+    """
+    result: list[T] = []
+    i, j = 0, 0
+
+    while i < len(left) and j < len(right):
+        if right[j] < left[i]:
+            result.append(right[j])
+            j += 1
+        else:
+            result.append(left[i])
+            i += 1
+
+    result.extend(left[i:])
+    result.extend(right[j:])
+    return result
+
 def merge_sort[T: Comparable](collection: list[T]) -> list[T]:
     """
     Sorts a list using the merge sort algorithm.
@@ -41,29 +64,6 @@ def merge_sort[T: Comparable](collection: list[T]) -> list[T]:
     >>> merge_sort([-2, -45, -5])
     [-45, -5, -2]
     """
-
-    def merge(left: list[T], right: list[T]) -> list[T]:
-        """
-        Merge two sorted lists into a single sorted list.
-
-        :param left: Left collection
-        :param right: Right collection
-        :return: Merged result
-        """
-        result: list[T] = []
-        i, j = 0, 0
-
-        while i < len(left) and j < len(right):
-            if right[j] < left[i]:
-                result.append(right[j])
-                j += 1
-            else:
-                result.append(left[i])
-                i += 1
-
-        result.extend(left[i:])
-        result.extend(right[j:])
-        return result
 
     if len(collection) <= 1:
         return collection
